@@ -18,7 +18,6 @@ def financial_projection(revenue, growth_rate, ebit_margin, tax_rate, capex_pct,
         capex = revenue * capex_pct
         wc_change = revenue * wc_change_pct
         
-        # Free Cash Flow (FCF)
         fcf = nopat + depreciation - capex - wc_change
         
         projections.append({
@@ -34,18 +33,18 @@ def financial_projection(revenue, growth_rate, ebit_margin, tax_rate, capex_pct,
     return projections
 
 def dcf_valuation(free_cash_flows, discount_rate, terminal_growth_rate):
-    # Present value of projected FCF
+    
     pv_fcf = sum(fcf / (1 + discount_rate) ** i for i, fcf in enumerate(free_cash_flows, start=1))
     
-    # Terminal value
+    
     terminal_value = free_cash_flows[-1] * (1 + terminal_growth_rate) / (discount_rate - terminal_growth_rate)
     pv_terminal_value = terminal_value / (1 + discount_rate) ** len(free_cash_flows)
     
-    # Total enterprise value
+    
     enterprise_value = pv_fcf + pv_terminal_value
     return enterprise_value
 
-# --- NPV Risk Analysis Functions ---
+
 def calculate_npv(fcff, r):
     return sum([fcff[i] / (1 + r) ** i for i in range(len(fcff))])
 
@@ -57,17 +56,16 @@ def monte_carlo_simulation(fcff, r_mean, r_std, num_simulations):
         npvs.append(npv)
     return npvs
 
-# --- Streamlit App ---
+
 st.title("Financial Analysis App")
 
-# Sidebar Navigation
+
 page = st.sidebar.selectbox("Choose a section", ["Company Valuation", "NPV Risk Analysis"])
 
-# --- Company Valuation Page ---
+
 if page == "Company Valuation":
     st.header("Company Valuation")
 
-    # Input fields for assumptions
     initial_revenue = st.number_input("Initial Revenue ($)", value=5000000)
     growth_rate = st.slider("Revenue Growth Rate (%)", min_value=0.0, max_value=0.5, value=0.1, step=0.01)
     ebit_margin = st.slider("EBIT Margin (%)", min_value=0.0, max_value=0.5, value=0.2, step=0.01)
