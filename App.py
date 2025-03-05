@@ -8,16 +8,13 @@ def financial_projection(revenue, growth_rate, ebit_margin, tax_rate, capex_pct,
     projections = []
     
     for year in range(1, 6):  # 5-year projection
-        # Projected revenue
+        
         revenue *= (1 + growth_rate)
 
-        # Operating income (EBIT)
         ebit = revenue * ebit_margin
         
-        # Net Operating Profit After Taxes (NOPAT)
         nopat = ebit * (1 - tax_rate)
         
-        # CapEx and Change in Working Capital
         capex = revenue * capex_pct
         wc_change = revenue * wc_change_pct
         
