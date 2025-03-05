@@ -74,57 +74,51 @@ if page == "Company Valuation":
     wc_change_pct = st.slider("Working Capital Change as % of Revenue", min_value=0.0, max_value=0.1, value=0.02, step=0.01)
     depreciation = st.number_input("Annual Depreciation ($)", value=100000)
 
-    # Generate projections
+    
     projections = financial_projection(initial_revenue, growth_rate, ebit_margin, tax_rate, capex_pct, wc_change_pct, depreciation)
 
-    # Display results
+    
     st.write("### Projected Free Cash Flows")
     projection_df = pd.DataFrame(projections)
     st.dataframe(projection_df[['Year', 'Revenue', 'EBIT', 'NOPAT', 'CapEx', 'WC Change', 'FCF']])
 
-    # Input fields for DCF valuation
+    
     st.header("DCF Valuation")
     discount_rate = st.slider("Discount Rate (%)", min_value=0.05, max_value=0.15, value=0.10, step=0.01)
     terminal_growth_rate = st.slider("Terminal Growth Rate (%)", min_value=0.01, max_value=0.05, value=0.03, step=0.01)
 
-    # Calculate enterprise value
+    
     fcf_projections = projection_df['FCF'].tolist()
     enterprise_value = dcf_valuation(fcf_projections, discount_rate, terminal_growth_rate)
 
     st.write(f"### Estimated Enterprise Value: ${enterprise_value:,.2f}")
 
-# --- NPV Risk Analysis Page ---
+
 elif page == "NPV Risk Analysis":
     st.header("NPV Risk Analysis")
 
-    # Inputs for FCFF for each year
     st.header("Input Free Cash Flow to Firm (FCFF) for each year")
     fcff = []
     num_years = st.number_input("Number of Years", value=5, min_value=1)
     for i in range(num_years):
         fcff.append(st.number_input(f"Year {i + 1} FCFF", value=0.0))
 
-    # Input for base discount rate
     st.header("Input Discount Rate")
     base_discount_rate = st.number_input("Base Discount Rate", value=0.1, format="%.5f")
 
-    # Sensitivity Analysis
     st.header("Sensitivity Analysis")
     sensitivity_variable = st.selectbox("Variable to Analyze", ["FCFF", "Discount Rate"])
     sensitivity_range = st.slider("Sensitivity Range (%)", min_value=-50, max_value=50, value=(-10, 10), step=1)
 
-    # Scenario Analysis
     st.header("Scenario Analysis")
     best_case = st.number_input("Best Case Discount Rate", value=0.08, format="%.5f")
     worst_case = st.number_input("Worst Case Discount Rate", value=0.12, format="%.5f")
 
-    # Monte Carlo Simulation
     st.header("Monte Carlo Simulation")
     r_mean = st.number_input("Mean Discount Rate for Monte Carlo Simulation", value=0.1, format="%.5f")
     r_std = st.number_input("Standard Deviation of Discount Rate for Monte Carlo Simulation", value=0.02, format="%.5f")
     num_simulations = st.number_input("Number of Simulations", value=1000, min_value=100, step=100)
 
-    # Perform Sensitivity Analysis
     if st.button("Run Sensitivity Analysis"):
         sensitivity_results = []
 
@@ -141,7 +135,6 @@ elif page == "NPV Risk Analysis":
 
         sensitivity_df = pd.DataFrame(sensitivity_results, columns=["Change (%)", "NPV"])
 
-        # Display Sensitivity Analysis Results
         st.subheader("Sensitivity Analysis Results")
         st.dataframe(sensitivity_df)
 
