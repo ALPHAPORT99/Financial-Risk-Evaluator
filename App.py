@@ -138,7 +138,7 @@ elif page == "NPV Risk Analysis":
         st.subheader("Sensitivity Analysis Results")
         st.dataframe(sensitivity_df)
 
-        # Plot Sensitivity Analysis Results
+        
         plt.figure(figsize=(10, 6))
         plt.plot(sensitivity_df["Change (%)"], sensitivity_df["NPV"], marker='o')
         plt.xlabel("Change (%)")
@@ -147,7 +147,7 @@ elif page == "NPV Risk Analysis":
         plt.grid(True)
         st.pyplot(plt.gcf())
 
-    # Perform Scenario Analysis
+    
     if st.button("Run Scenario Analysis"):
         base_npv = calculate_npv(fcff, base_discount_rate)
         best_case_npv = calculate_npv(fcff, best_case)
@@ -161,11 +161,11 @@ elif page == "NPV Risk Analysis":
 
         scenario_df = pd.DataFrame(scenario_results)
 
-        # Display Scenario Analysis Results
+        
         st.subheader("Scenario Analysis Results")
         st.dataframe(scenario_df)
 
-        # Plot Scenario Analysis Results
+        
         plt.figure(figsize=(10, 6))
         plt.bar(scenario_df["Scenario"], scenario_df["NPV"], color=["red", "blue", "green"])
         plt.xlabel("Scenario")
@@ -174,18 +174,18 @@ elif page == "NPV Risk Analysis":
         plt.grid(True)
         st.pyplot(plt.gcf())
 
-    # Perform Monte Carlo Simulation
+    
     if st.button("Run Monte Carlo Simulation"):
         npvs = monte_carlo_simulation(fcff, r_mean, r_std, num_simulations)
 
-        # Display simulation results
+        
         st.subheader("Monte Carlo Simulation Results")
         st.write(f"Mean NPV: ${np.mean(npvs):,.2f}")
         st.write(f"Standard Deviation of NPV: ${np.std(npvs):,.2f}")
         st.write(f"5th Percentile NPV: ${np.percentile(npvs, 5):,.2f}")
         st.write(f"95th Percentile NPV: ${np.percentile(npvs, 95):,.2f}")
 
-        # Plot histogram of NPV results
+        
         plt.figure(figsize=(10, 6))
         plt.hist(npvs, bins=50, edgecolor='k', alpha=0.7)
         plt.axvline(np.mean(npvs), color='r', linestyle='dashed', linewidth=2)
