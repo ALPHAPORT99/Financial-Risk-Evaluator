@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# --- Company Valuation Functions ---
+
 def financial_projection(revenue, growth_rate, ebit_margin, tax_rate, capex_pct, wc_change_pct, depreciation):
     projections = []
     
